@@ -116,10 +116,20 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p ${{ inputs.ssh-port }} ${{ inputs.host }} >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      - name: Sync repository
         run: |
           ssh -p ${{ inputs.ssh-port }} ${{ inputs.user }}@${{ inputs.host }} "\
             mkdir -p ${{ inputs.deploy-path }} && \
+            cd ${{ inputs.deploy-path }} && \
+            if [ -d .git ]; then \
+              git fetch origin && git checkout ${{ github.sha }}; \
+            else \
+              git clone git@github.com:${{ github.repository }}.git . && git checkout ${{ github.sha }}; \
+            fi"
+
+      - name: Deploy
+        run: |
+          ssh -p ${{ inputs.ssh-port }} ${{ inputs.user }}@${{ inputs.host }} "\
             cd ${{ inputs.deploy-path }} && \
             docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest && \
             ${{ inputs.deploy-command }}"
