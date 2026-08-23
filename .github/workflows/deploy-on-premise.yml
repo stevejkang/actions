@@ -119,6 +119,7 @@ jobs:
       - name: Deploy
         run: |
           ssh -p ${{ inputs.ssh-port }} ${{ inputs.user }}@${{ inputs.host }} "\
+            mkdir -p ${{ inputs.deploy-path }} && \
             cd ${{ inputs.deploy-path }} && \
             docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest && \
             ${{ inputs.deploy-command }}"
