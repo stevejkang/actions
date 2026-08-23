@@ -140,6 +140,7 @@ jobs:
           SUDO: ${{ inputs.use-sudo && 'sudo' || '' }}
         run: |
           ssh -p ${{ inputs.ssh-port }} ${{ inputs.user }}@${{ inputs.host }} "\
+            export PATH=/usr/local/bin:\$PATH && \
             cd ${{ inputs.deploy-path }} && \
             $SUDO docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest && \
             ${{ inputs.deploy-command }}"
