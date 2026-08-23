@@ -122,12 +122,12 @@ jobs:
             mkdir -p ${{ inputs.deploy-path }} && \
             cd ${{ inputs.deploy-path }} && \
             if [ -d .git ]; then \
-              git fetch origin && git checkout ${{ github.sha }}; \
+              git fetch origin && git checkout -f ${{ github.sha }}; \
             else \
               git init && \
               git remote add origin git@github.com:${{ github.repository }}.git && \
               git fetch origin && \
-              git checkout ${{ github.sha }}; \
+              git checkout -f ${{ github.sha }}; \
             fi"
 
       - name: Deploy
