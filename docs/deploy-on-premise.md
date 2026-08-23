@@ -106,14 +106,14 @@ Each build produces two tags:
 
 1. Create a project in [Infisical](https://app.infisical.com)
 2. Add the three secrets (`TAILSCALE_OAUTH_CLIENT_ID`, `TAILSCALE_OAUTH_SECRET`, `SSH_PRIVATE_KEY`) to the `prod` environment
-3. Create a **Machine Identity** with OIDC auth method
-4. Configure the identity:
+3. Go to **Organization Access Control** → **Machine Identities** → **Create Identity**
+4. Add **OIDC Auth** method to the identity:
    - **OIDC Discovery URL**: `https://token.actions.githubusercontent.com`
    - **Issuer**: `https://token.actions.githubusercontent.com`
    - **Subject**: `repo:<owner>/*:ref:refs/heads/main` (or scope per repo)
    - **Audience**: `https://github.com/<owner>`
-5. Add the identity to the project with **Read** permission
-6. Copy the Machine Identity ID — this is a public value, safe to commit
+5. Go to **Project Settings** → **Access Control** → **Machine Identities** → add the identity with **Viewer** permission
+6. Copy the Machine Identity ID
 
 ### One-time target machine setup
 
@@ -127,13 +127,14 @@ mkdir -p /path/to/my-app
 
 The PAT only needs the `read:packages` scope.
 
-### Tailscale OAuth client
+### Tailscale trust credential
 
-1. Go to [Tailscale Admin Console](https://login.tailscale.com/admin/settings/oauth) → Settings → OAuth clients
-2. Create a new OAuth client
+1. Go to [Tailscale Admin Console](https://console.tailscale.com/admin/settings/trust-credentials) → Settings → Trust credentials
+2. Click **Credential** → **OAuth**
 3. Grant the `auth_keys` scope with **Write** permission
-4. Assign a tag (e.g. `tag:ci`) and ensure it's allowed in your ACL policy
-5. Store the client ID and secret in **Infisical** (not in GitHub Secrets)
+4. Assign a tag (e.g. `tag:ci`) and ensure it's defined in your ACL `tagOwners`
+5. Click **Generate credential** — copy the Client ID and Client Secret (secret is shown only once)
+6. Store both in **Infisical** (not in GitHub Secrets)
 
 ### SSH key
 
