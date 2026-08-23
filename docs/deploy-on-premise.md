@@ -61,6 +61,7 @@ The caller workflow must declare these permissions at the top level:
 | `deploy-command` | `string` | No | `docker compose up -d` | Command to run after `docker pull` |
 | `user` | `string` | No | `root` | SSH user on the target machine |
 | `ssh-port` | `number` | No | `22` | SSH port on the target machine |
+| `use-sudo` | `boolean` | No | `false` | Use sudo for docker commands on the target machine |
 | `dockerfile` | `string` | No | `./Dockerfile` | Dockerfile path relative to repo root |
 | `context` | `string` | No | `.` | Docker build context relative to repo root |
 | `tailscale-tags` | `string` | No | `tag:ci` | Tailscale ACL tags for ephemeral node |

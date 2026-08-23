@@ -40,6 +40,11 @@ on:
         required: false
         type: number
         default: 22
+      use-sudo:
+        description: 'Use sudo for docker commands on the target machine'
+        required: false
+        type: boolean
+        default: false
       tailscale-tags:
         description: 'Tailscale ACL tags for ephemeral node'
         required: false
@@ -131,8 +136,10 @@ jobs:
             fi"
 
       - name: Deploy
+        env:
+          SUDO: ${{ inputs.use-sudo && 'sudo' || '' }}
         run: |
           ssh -p ${{ inputs.ssh-port }} ${{ inputs.user }}@${{ inputs.host }} "\
             cd ${{ inputs.deploy-path }} && \
-            docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest && \
+            $SUDO docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.image-name }}:latest && \
             ${{ inputs.deploy-command }}"
